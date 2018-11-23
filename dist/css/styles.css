@@ -1,0 +1,111 @@
+body {
+    background:#eee;
+    font-weight: 300;
+}
+
+.header {
+  text-align: center;
+  font-family: sans-serif;
+
+  &__title {
+    font-weight: 300;
+    font-size: 60px;
+  }
+}
+.clearfix {
+  content: "";
+  display: table;
+  clear: both;
+}
+.ToDoList {
+    background: #fff;
+  width: 40%;
+  margin: auto;
+  font-family: sans-serif;
+
+  &__header {
+    -webkit-box-shadow: 0px 1px 4px silver;
+            box-shadow: 0px 1px 4px silver;
+  }
+  &__write-task {
+    border: 0;
+    height: 60px;
+    width: 510px;
+    outline: none;
+    font-size: 25px;
+    padding-left: 20px;
+    font-style: italic;
+    font-weight: 300;
+  }
+  &__task {
+    -webkit-box-shadow: 0px 0px 1px silver;
+            box-shadow: 0px 0px 1px silver;
+    height: 60px;
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    &:hover .remove-icon {
+      opacity: 0.2;
+    }
+  }
+  &__task-text {
+    width: 100%;
+    position: relative;
+    font-size: 25px;
+    padding: 16px 0 0 15px;
+  }
+  &__remove-task {
+    width: 50px;
+    cursor: pointer;
+    &:hover .remove-icon {
+      opacity: 1;
+    }
+  }
+  &__check {
+    width: 50px;
+  }
+  &__check-task {
+    -webkit-box-shadow: 0px 0px 2px silver;
+            box-shadow: 0px 0px 2px silver;
+    display: block;
+    height: 35px;
+    width: 35px;
+    border-radius: 100%;
+    position: relative;
+    margin: 30% auto;
+    cursor: pointer;
+  }
+  &__footer {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      height: 50px;
+      -webkit-box-shadow: 0px 2px 2px silver;
+              box-shadow: 0px 2px 2px silver;
+  }
+}
+.hide {
+  display: none;
+}
+.checked {
+  text-decoration: line-through;
+}
+.statusCheck {
+  background: url("../img/check.png");
+  background-size: 100%;
+}
+.remove-icon {
+  width: 25px;
+  margin: 40% auto;
+  display: block;
+  opacity: 0;
+}
