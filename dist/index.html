@@ -6,32 +6,31 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="normalize/normalize.css" />
     <link rel="stylesheet" href="css/main.css" />
-    <title>Document</title>
+    <title>TODO APP</title>
   </head>
-  <body>
-    <header class="header"><span class="header__title">todos</span></header>
-
-    <div class="ToDoList clearfix">
-      <div class="ToDoList__header">
-        <div class="ToDoList__arrow"></div>
-        <input class="ToDoList__write-task" type="text" placeholder="What need to be done?">
+  <body class="background">
+    <header class="title">
+      todos
+    </header>
+    <div class="ToDoApp">
+      <div class="ToDoApp__header">
+        <input type="text" class="ToDoApp__new-task" placeholder="What needs to be done?">
       </div>
-      <div data-container="task-container" class="ToDoList__task-container hide">
-        <div class="ToDoList__tasks">
-        </div>
-        <div class="ToDoList__footer">
-          <div class="ToDoList__counter all">
-            <span class=""></span> items left
+      <div class="ToDoApp__main">
+          <ul class="ToDoApp__list"></ul>
+          <div class="ToDoApp__footer">
+            <div class="ToDoApp__counter">
+             <span data-counter="0">0</span> items left
+            </div>
+              <ul class="ToDoApp__tabs">
+                <li class="tabs-item"><label class="ToDoApp__tab">all<input class="tabs-radio" data-tabs="all" type="radio" name="tabs"></label></li>
+                <li class="tabs-item"><label class="ToDoApp__tab">active<input class="tabs-radio" data-tabs="active" type="radio" name="tabs"></label></li>
+                <li class="tabs-item"><label class="ToDoApp__tab">complited<input class="tabs-radio" data-tabs="complited" type="radio" name="tabs"></label></li>
+              </ul>
+            <div class="ToDoApp__clear">
+                Clear complited
+            </div>
           </div>
-          <div class="ToDoList__tabs all">
-              all
-              active
-              completed
-          </div>
-          <div class="ToDoList__clear all">
-            clear all
-          </div>
-        </div>
       </div>
     </div>
     <script src="js/script.js"></script>
