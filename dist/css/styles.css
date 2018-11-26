@@ -143,3 +143,12 @@ $generalFont: "helvetica neue";
 .tabs-item {
   display: inline-block;
 }
+.toggleIcon {
+  display: block;
+  height: 40px;
+  width: 40px;
+  background: url('../img/unchecked.svg');
+}
+.toogleCompleted {
+  background: url('../img/checked.svg');
+}

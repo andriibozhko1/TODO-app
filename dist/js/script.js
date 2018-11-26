@@ -1,11 +1,6 @@
 (function() {
   const toDoApp = document.querySelector(".ToDoApp__header");
   const newTask = document.querySelector(".ToDoApp__create");
-  const unchecked =
-    '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="50" fill="none" stroke="#eeeeee" stroke-width="3"/></svg>';
-  const checked =
-  // Replace.
-  '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="50" fill="none" stroke="#eeeeee" stroke-width="3"/><path fill="#5dc2af" d="M72 25L42 71 27 56l-4 4 20 20 34-52z"/></svg>';
   const taskContainer = document.querySelector(".ToDoApp__main");
   const clearAllBtn = document.querySelector(".ToDoApp__clear");
   const showAllTabs = document.querySelector("[data-tabs=all]");
@@ -26,7 +21,6 @@
 
     const toogleIcons = document.createElement("div");
     toogleIcons.classList.add("toggleIcon");
-    toogleIcons.innerHTML = unchecked; // put our icon.
 
     toggle.appendChild(toogleIcons);
     toggle.appendChild(checkbox);
@@ -59,8 +53,8 @@
 
   const updateCounter = function() {
     const counter = document.querySelector("[data-counter]");
-    const activeTasks = document.querySelectorAll("[data-status=active]");
-    counter.innerHTML = activeTasks.length;
+    const activeTasks = document.querySelectorAll("[data-status=active]").length;
+    counter.innerHTML = activeTasks;
   };
 
   const compliteTasks = function() {
@@ -72,11 +66,11 @@
         let changeToggleIcons = event.target.parentElement.querySelector(".toggleIcon");
         if (event.target.checked) {
           toggleItem.dataset.status = "complited";
-          changeToggleIcons.innerHTML = checked;
+          changeToggleIcons.classList.add('toogleCompleted');
           fontTransformation.classList.add('complited');
         } else {
           toggleItem.dataset.status = "active";
-          changeToggleIcons.innerHTML = unchecked;
+          changeToggleIcons.classList.remove('toogleCompleted');
           fontTransformation.classList.remove('complited');
         }
       }
@@ -86,7 +80,7 @@
   const destroyTask = function() {
     this.parentElement.remove();
     updateCounter();
-  }; // remove items (li)
+  }; 
 
   const createArrow = function() {
     const arrowExist = !!toDoApp.querySelector('.ToDoApp__arrow');
@@ -120,19 +114,19 @@
     });
     
   };
+
+  clearAllBtn.addEventListener("click", function() {
+    let allComplitedTasks = document.querySelectorAll("[data-status=complited]");
+    for (let j = 0; j < allComplitedTasks.length; j++) {
+      allComplitedTasks[j].remove();
+    }
+  });
+
   //add event to tabs.(FILTER)
   showAllTabs.addEventListener("click", function() {
     const filterItems = document.querySelectorAll("[data-status]");
     for (let j = 0; j < filterItems.length; j++) {
       filterItems[j].classList.remove("hide");
-    }
-  });
-  clearAllBtn.addEventListener("click", function() {
-    let allComplitedTasks = document.querySelectorAll(
-      "[data-status=complited]"
-    );
-    for (let j = 0; j < allComplitedTasks.length; j++) {
-      allComplitedTasks[j].remove();
     }
   });
   showActiveTabs.addEventListener("click", function() {
@@ -170,34 +164,4 @@
       }
     }
   });
-
-
-
-const tasks = [{
-  id: 1,
-  name: 'learn JavaScript',
-  status: 'active'
-  
-},
-{
-  id: 2,
-  name: 'learn HTML',
-  status: 'completed'
-}]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 })();
