@@ -8,85 +8,9 @@
   const taskContainer = document.querySelector(".ToDoApp__main");
   const arrow = document.createElement("div");
   const clearAllBtn = document.querySelector(".ToDoApp__clear");
-  const toDoTabs = document.querySelectorAll("[data-tabs]");
-
-  const filterTask = function(z) {
-    let checkItems = document.querySelectorAll("[data-status]");
-
-    if (toDoTabs[z].checked) {
-      for (let x = 0; x < checkItems.length; x++) {
-        if (toDoTabs[z].dataset.tabs == "active") {
-          if (checkItems[x].dataset.status == "complited") {
-            checkItems[x].classList.add("hide");
-          } else {
-            checkItems[x].classList.remove("hide");
-          }
-        } else if (toDoTabs[z].dataset.tabs == "complited") {
-          if (checkItems[x].dataset.status == "active") {
-            checkItems[x].classList.add("hide");
-          } else {
-            checkItems[x].classList.remove("hide");
-          }
-        } else if (toDoTabs[z].dataset.tabs == "all") {
-          checkItems[x].classList.remove("hide");
-        }
-      }
-    }
-  };
-
-  //add event to tabs.s
-  for (let z = 0; z < toDoTabs.length; z++) {
-    toDoTabs[z].addEventListener("click", function() {
-      filterTask(z);
-    });
-  }
-
-  clearAllBtn.addEventListener("click", function() {
-    let allComplitedTasks = document.querySelectorAll(
-      "[data-status=complited]",
-    );
-    for (let j = 0; j < allComplitedTasks.length; j++) {
-      allComplitedTasks[j].remove();
-    }
-  });
-
-  const destroyTask = function() {
-    this.parentElement.remove();
-    updateCounter();
-  }; // remove items (li)
-
-  const createArrow = function() {
-    arrow.classList.add("ToDoApp__arrow");
-    arrow.innerHTML = "❯";
-    toDoApp.insertBefore(arrow, newTask);
-  };
-
-  arrow.addEventListener("click", function() {
-    const allTasks = document.querySelectorAll("[data-status]");
-    let allTasksText = document.querySelectorAll(".task-text");
-    let allCheckBox = document.querySelectorAll(".checkbox");
-    let allToggleIcons = document.querySelectorAll(".toggleIcon");
-    for (let i = 0; i < allTasks.length; i++) {
-      if (allTasks[i].dataset.status === "active") {
-        allTasks[i].dataset.status = "complited";
-        allTasksText[i].classList.add("complited");
-        allToggleIcons[i].innerHTML = checked;
-        allCheckBox[i].checked = true;
-      } else {
-        allTasks[i].dataset.status = "active";
-        allTasksText[i].classList.remove("complited");
-        allCheckBox[i].checked = false;
-        allToggleIcons[i].innerHTML = unchecked;
-      }
-    }
-    updateCounter();
-  });
-
-  const updateCounter = function() {
-    const counter = document.querySelector("[data-counter]");
-    let activeTask = document.querySelectorAll("[data-status=active]");
-    counter.innerHTML = activeTask.length;
-  }; // COUNTER
+  const showAllTabs = document.querySelector("[data-tabs=all]");
+  const showActiveTabs = document.querySelector("[data-tabs=active]");
+  const showCompletedTabs = document.querySelector("[data-tabs=complited]");
 
   const createTask = function(text) {
     const toDoList = document.querySelector(".ToDoApp__list"); // ul.
@@ -127,24 +51,103 @@
       removeBtn.innerHTML = "✕";
       toDoItem.appendChild(removeBtn);
 
-      const complitedTask = function() {
-        if (checkbox.checked) {
-          taskText.classList.add("complited");
-          toogleIcons.innerHTML = checked;
-          createItems.setAttribute("data-status", "complited");
-        } else {
-          taskText.classList.remove("complited");
-          toogleIcons.innerHTML = unchecked;
-          createItems.setAttribute("data-status", "active");
-        }
-        updateCounter();
-      };
-
       removeBtn.addEventListener("click", destroyTask);
-      toggle.addEventListener("click", complitedTask);
     };
     createTaskContent(createItems);
   };
+
+  const updateCounter = function() {
+    const counter = document.querySelector("[data-counter]");
+    let activeTask = document.querySelectorAll("[data-status=active]");
+    counter.innerHTML = activeTask.length;
+  };
+
+  const compliteTasks = function() {
+    const toDoList = document.querySelector(".ToDoApp__list");
+    toDoList.addEventListener("click", function(event) {
+      if (event.target.classList.contains("checkbox")) {
+        let toggleItem = event.target.closest("[data-status]");
+        let fontTransformation = toggleItem.querySelector('.task-text');
+        let changeToggleIcons = event.target.parentElement.querySelector(".toggleIcon");
+        if (event.target.checked) {
+          toggleItem.dataset.status = "complited";
+          changeToggleIcons.innerHTML = checked;
+          fontTransformation.classList.add('complited');
+        } else {
+          toggleItem.dataset.status = "active";
+          changeToggleIcons.innerHTML = unchecked;
+          fontTransformation.classList.remove('complited');
+        }
+      }
+      updateCounter();
+    });
+  };
+  const destroyTask = function() {
+    this.parentElement.remove();
+    updateCounter();
+  }; // remove items (li)
+
+  const createArrow = function() {
+    arrow.classList.add("ToDoApp__arrow");
+    arrow.innerHTML = "❯";
+    toDoApp.insertBefore(arrow, newTask);
+  };
+  //add event to tabs.(FILTER)
+  showAllTabs.addEventListener("click", function() {
+    const filterItems = document.querySelectorAll("[data-status]");
+    for (let j = 0; j < filterItems.length; j++) {
+      filterItems[j].classList.remove("hide");
+    }
+  });
+  clearAllBtn.addEventListener("click", function() {
+    let allComplitedTasks = document.querySelectorAll(
+      "[data-status=complited]"
+    );
+    for (let j = 0; j < allComplitedTasks.length; j++) {
+      allComplitedTasks[j].remove();
+    }
+  });
+
+  arrow.addEventListener("click", function() {
+    const allTasks = document.querySelectorAll("[data-status]");
+    let allTasksText = document.querySelectorAll(".task-text");
+    let allCheckBox = document.querySelectorAll(".checkbox");
+    let allToggleIcons = document.querySelectorAll(".toggleIcon");
+    for (let i = 0; i < allTasks.length; i++) {
+      if (allTasks[i].dataset.status === "active") {
+        allTasks[i].dataset.status = "complited";
+        allTasksText[i].classList.add("complited");
+        allToggleIcons[i].innerHTML = checked;
+        allCheckBox[i].checked = true;
+      } else {
+        allTasks[i].dataset.status = "active";
+        allTasksText[i].classList.remove("complited");
+        allCheckBox[i].checked = false;
+        allToggleIcons[i].innerHTML = unchecked;
+      }
+    }
+    updateCounter();
+  });
+  showActiveTabs.addEventListener("click", function() {
+    const filterItems = document.querySelectorAll("[data-status]");
+    for (let j = 0; j < filterItems.length; j++) {
+      if (filterItems[j].dataset.status != "active") {
+        filterItems[j].classList.add("hide");
+      } else {
+        filterItems[j].classList.remove("hide");
+      }
+    }
+  });
+  showCompletedTabs.addEventListener("click", function() {
+    const filterItems = document.querySelectorAll("[data-status]");
+    for (let j = 0; j < filterItems.length; j++) {
+      if (filterItems[j].dataset.status != "complited") {
+        filterItems[j].classList.add("hide");
+      } else {
+        filterItems[j].classList.remove("hide");
+      }
+    }
+  });
 
   newTask.addEventListener("keydown", function(key) {
     if (key.keyCode === 13) {
@@ -152,6 +155,7 @@
         createArrow();
         createTask(newTask.value);
         updateCounter();
+        compliteTasks();
         if (taskContainer.classList.contains("hide")) {
           taskContainer.classList.remove("hide");
         }
