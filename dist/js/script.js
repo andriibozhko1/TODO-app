@@ -4,13 +4,48 @@
   const unchecked =
     '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="50" fill="none" stroke="#eeeeee" stroke-width="3"/></svg>';
   const checked =
-    '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="50" fill="none" stroke="#eeeeee" stroke-width="3"/><path fill="#5dc2af" d="M72 25L42 71 27 56l-4 4 20 20 34-52z"/></svg>';
+  // Replace.
+  '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="50" fill="none" stroke="#eeeeee" stroke-width="3"/><path fill="#5dc2af" d="M72 25L42 71 27 56l-4 4 20 20 34-52z"/></svg>';
   const taskContainer = document.querySelector(".ToDoApp__main");
-  const arrow = document.createElement("div");
   const clearAllBtn = document.querySelector(".ToDoApp__clear");
   const showAllTabs = document.querySelector("[data-tabs=all]");
   const showActiveTabs = document.querySelector("[data-tabs=active]");
   const showCompletedTabs = document.querySelector("[data-tabs=complited]");
+
+  const createTaskContent = function(toDoItem,text) {
+    // TOGGLE
+    const toggleBlock = document.createElement("div");
+    toggleBlock.classList.add("check");
+
+    const toggle = document.createElement("label");
+    toggle.classList.add("toggle");
+
+    const checkbox = document.createElement("input");
+    checkbox.classList.add("checkbox");
+    checkbox.setAttribute("type", "checkbox");
+
+    const toogleIcons = document.createElement("div");
+    toogleIcons.classList.add("toggleIcon");
+    toogleIcons.innerHTML = unchecked; // put our icon.
+
+    toggle.appendChild(toogleIcons);
+    toggle.appendChild(checkbox);
+    toggleBlock.appendChild(toggle);
+    toDoItem.appendChild(toggleBlock);
+
+    // TASK TEXT
+    const taskText = document.createElement("div");
+    taskText.classList.add("task-text");
+    taskText.innerHTML = text;
+    toDoItem.appendChild(taskText);
+    // REMOVE BTN
+    const removeBtn = document.createElement("div");
+    removeBtn.classList.add("remove");
+    removeBtn.innerHTML = "✕";
+    toDoItem.appendChild(removeBtn);
+
+    removeBtn.addEventListener("click", destroyTask);
+  };
 
   const createTask = function(text) {
     const toDoList = document.querySelector(".ToDoApp__list"); // ul.
@@ -19,47 +54,13 @@
     createItems.classList.add("ToDoApp__item"); // set class name for li - items
     toDoList.appendChild(createItems); // pul (list = li) in our ul.
 
-    const createTaskContent = function(toDoItem) {
-      // TOGGLE
-      const toggleBlock = document.createElement("div");
-      toggleBlock.classList.add("check");
-
-      const toggle = document.createElement("label");
-      toggle.classList.add("toggle");
-
-      const checkbox = document.createElement("input");
-      checkbox.classList.add("checkbox");
-      checkbox.setAttribute("type", "checkbox");
-
-      const toogleIcons = document.createElement("div");
-      toogleIcons.classList.add("toggleIcon");
-      toogleIcons.innerHTML = unchecked; // put our icon.
-
-      toggle.appendChild(toogleIcons);
-      toggle.appendChild(checkbox);
-      toggleBlock.appendChild(toggle);
-      toDoItem.appendChild(toggleBlock);
-
-      // TASK TEXT
-      const taskText = document.createElement("div");
-      taskText.classList.add("task-text");
-      taskText.innerHTML = text;
-      toDoItem.appendChild(taskText);
-      // REMOVE BTN
-      const removeBtn = document.createElement("div");
-      removeBtn.classList.add("remove");
-      removeBtn.innerHTML = "✕";
-      toDoItem.appendChild(removeBtn);
-
-      removeBtn.addEventListener("click", destroyTask);
-    };
-    createTaskContent(createItems);
+    createTaskContent(createItems,text);
   };
 
   const updateCounter = function() {
     const counter = document.querySelector("[data-counter]");
-    let activeTask = document.querySelectorAll("[data-status=active]");
-    counter.innerHTML = activeTask.length;
+    const activeTasks = document.querySelectorAll("[data-status=active]");
+    counter.innerHTML = activeTasks.length;
   };
 
   const compliteTasks = function() {
@@ -88,9 +89,36 @@
   }; // remove items (li)
 
   const createArrow = function() {
+    const arrowExist = !!toDoApp.querySelector('.ToDoApp__arrow');
+    if(arrowExist) {
+      return;
+    }
+    const arrow = document.createElement("div");
     arrow.classList.add("ToDoApp__arrow");
     arrow.innerHTML = "❯";
     toDoApp.insertBefore(arrow, newTask);
+    
+    arrow.addEventListener("click", function() {
+      const allTasks = document.querySelectorAll("[data-status]");
+      const allTasksText = document.querySelectorAll(".task-text");
+      const allCheckBox = document.querySelectorAll(".checkbox");
+      const allToggleIcons = document.querySelectorAll(".toggleIcon");
+      for (let i = 0; i < allTasks.length; i++) {
+        if (allTasks[i].dataset.status === "active") {
+          allTasks[i].dataset.status = "complited";
+          allTasksText[i].classList.add("complited");
+          allToggleIcons[i].innerHTML = checked;
+          allCheckBox[i].checked = true;
+        } else {
+          allTasks[i].dataset.status = "active";
+          allTasksText[i].classList.remove("complited");
+          allCheckBox[i].checked = false;
+          allToggleIcons[i].innerHTML = unchecked;
+        }
+      }
+      updateCounter();
+    });
+    
   };
   //add event to tabs.(FILTER)
   showAllTabs.addEventListener("click", function() {
@@ -106,27 +134,6 @@
     for (let j = 0; j < allComplitedTasks.length; j++) {
       allComplitedTasks[j].remove();
     }
-  });
-
-  arrow.addEventListener("click", function() {
-    const allTasks = document.querySelectorAll("[data-status]");
-    let allTasksText = document.querySelectorAll(".task-text");
-    let allCheckBox = document.querySelectorAll(".checkbox");
-    let allToggleIcons = document.querySelectorAll(".toggleIcon");
-    for (let i = 0; i < allTasks.length; i++) {
-      if (allTasks[i].dataset.status === "active") {
-        allTasks[i].dataset.status = "complited";
-        allTasksText[i].classList.add("complited");
-        allToggleIcons[i].innerHTML = checked;
-        allCheckBox[i].checked = true;
-      } else {
-        allTasks[i].dataset.status = "active";
-        allTasksText[i].classList.remove("complited");
-        allCheckBox[i].checked = false;
-        allToggleIcons[i].innerHTML = unchecked;
-      }
-    }
-    updateCounter();
   });
   showActiveTabs.addEventListener("click", function() {
     const filterItems = document.querySelectorAll("[data-status]");
@@ -163,4 +170,34 @@
       }
     }
   });
+
+
+
+const tasks = [{
+  id: 1,
+  name: 'learn JavaScript',
+  status: 'active'
+  
+},
+{
+  id: 2,
+  name: 'learn HTML',
+  status: 'completed'
+}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 })();
