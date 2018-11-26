@@ -15,7 +15,7 @@
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1); }
   .ToDoApp__header {
     position: relative; }
-  .ToDoApp__new-task {
+  .ToDoApp__create {
     font-style: italic;
     font-family: "helvetica neue";
     font-weight: 200;
@@ -91,7 +91,7 @@
   font-weight: 200;
   padding: 16px; }
 
-.completed {
+.complited {
   text-decoration: line-through;
   color: silver; }
 

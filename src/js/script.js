@@ -1,6 +1,6 @@
 (function() {
   const toDoApp = document.querySelector(".ToDoApp__header");
-  const newTask = document.querySelector(".ToDoApp__new-task");
+  const newTask = document.querySelector(".ToDoApp__create");
   const unchecked =
     '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="50" fill="none" stroke="#eeeeee" stroke-width="3"/></svg>';
   const checked =
@@ -8,41 +8,42 @@
   const taskContainer = document.querySelector(".ToDoApp__main");
   const arrow = document.createElement("div");
   const clearAllBtn = document.querySelector(".ToDoApp__clear");
-
   const toDoTabs = document.querySelectorAll("[data-tabs]");
 
   const filterTask = function(z) {
     let checkItems = document.querySelectorAll("[data-status]");
 
-      if (toDoTabs[z].checked) {
-        for (let x = 0; x < checkItems.length; x++) {
-          if (toDoTabs[z].dataset.tabs == "active") {
-            if (checkItems[x].dataset.status == "complited") {
-              checkItems[x].classList.add("hide");
-            } else {
-              checkItems[x].classList.remove("hide");
-            }
-          } else if (toDoTabs[z].dataset.tabs == "complited") {
-            if (checkItems[x].dataset.status == "active") {
-              checkItems[x].classList.add("hide");
-            } else {
-              checkItems[x].classList.remove("hide");
-            }
-          } else if(toDoTabs[z].dataset.tabs == "all") {
+    if (toDoTabs[z].checked) {
+      for (let x = 0; x < checkItems.length; x++) {
+        if (toDoTabs[z].dataset.tabs == "active") {
+          if (checkItems[x].dataset.status == "complited") {
+            checkItems[x].classList.add("hide");
+          } else {
             checkItems[x].classList.remove("hide");
           }
+        } else if (toDoTabs[z].dataset.tabs == "complited") {
+          if (checkItems[x].dataset.status == "active") {
+            checkItems[x].classList.add("hide");
+          } else {
+            checkItems[x].classList.remove("hide");
+          }
+        } else if (toDoTabs[z].dataset.tabs == "all") {
+          checkItems[x].classList.remove("hide");
         }
       }
     }
-    for (let z = 0; z < toDoTabs.length; z++) {
-      toDoTabs[z].addEventListener("click", function() {
-        filterTask(z);
-      });
-    }
+  };
+
+  //add event to tabs.s
+  for (let z = 0; z < toDoTabs.length; z++) {
+    toDoTabs[z].addEventListener("click", function() {
+      filterTask(z);
+    });
+  }
 
   clearAllBtn.addEventListener("click", function() {
     let allComplitedTasks = document.querySelectorAll(
-      "[data-status=complited]"
+      "[data-status=complited]",
     );
     for (let j = 0; j < allComplitedTasks.length; j++) {
       allComplitedTasks[j].remove();
@@ -51,7 +52,7 @@
 
   const destroyTask = function() {
     this.parentElement.remove();
-    setCounterValue(0);
+    updateCounter();
   }; // remove items (li)
 
   const createArrow = function() {
@@ -59,6 +60,7 @@
     arrow.innerHTML = "❯";
     toDoApp.insertBefore(arrow, newTask);
   };
+
   arrow.addEventListener("click", function() {
     const allTasks = document.querySelectorAll("[data-status]");
     let allTasksText = document.querySelectorAll(".task-text");
@@ -77,13 +79,13 @@
         allToggleIcons[i].innerHTML = unchecked;
       }
     }
-    setCounterValue(0);
+    updateCounter();
   });
 
-  const setCounterValue = function(arg) {
+  const updateCounter = function() {
     const counter = document.querySelector("[data-counter]");
     let activeTask = document.querySelectorAll("[data-status=active]");
-    counter.innerHTML = activeTask.length + arg;
+    counter.innerHTML = activeTask.length;
   }; // COUNTER
 
   const createTask = function(text) {
@@ -135,7 +137,7 @@
           toogleIcons.innerHTML = unchecked;
           createItems.setAttribute("data-status", "active");
         }
-        setCounterValue(0);
+        updateCounter();
       };
 
       removeBtn.addEventListener("click", destroyTask);
@@ -146,13 +148,15 @@
 
   newTask.addEventListener("keydown", function(key) {
     if (key.keyCode === 13) {
-      createArrow();
-      setCounterValue(1);
-      createTask(newTask.value);
-      if (taskContainer.classList.contains("hide")) {
-        taskContainer.classList.remove("hide");
+      if (newTask.value != "") {
+        createArrow();
+        createTask(newTask.value);
+        updateCounter();
+        if (taskContainer.classList.contains("hide")) {
+          taskContainer.classList.remove("hide");
+        }
+        newTask.value = "";
       }
-      newTask.value = "";
     }
   });
 })();

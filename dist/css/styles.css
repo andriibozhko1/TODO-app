@@ -20,7 +20,7 @@ $generalFont: "helvetica neue";
   &__header {
     position: relative;
   }
-  &__new-task {
+  &__create {
     font-style: italic;
     font-family: $generalFont;
     font-weight: 200;
@@ -126,7 +126,7 @@ $generalFont: "helvetica neue";
   font-weight: 200;
   padding: 16px;
 }
-.completed {
+.complited {
   text-decoration: line-through;
   color: silver;
 }
