@@ -101,13 +101,13 @@
         if (allTasks[i].dataset.status === "active") {
           allTasks[i].dataset.status = "complited";
           allTasksText[i].classList.add("complited");
-          allToggleIcons[i].innerHTML = checked;
+          allToggleIcons[i].classList.add('toogleCompleted');
           allCheckBox[i].checked = true;
         } else {
           allTasks[i].dataset.status = "active";
           allTasksText[i].classList.remove("complited");
           allCheckBox[i].checked = false;
-          allToggleIcons[i].innerHTML = unchecked;
+          allToggleIcons[i].classList.remove('toogleCompleted');;
         }
       }
       updateCounter();
